@@ -2,7 +2,7 @@
 
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-5.0-blue.svg?style=flat&logo=swift) ![SwiftData](https://img.shields.io/badge/Database-SwiftData-green.svg) ![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)
 
-**[Your App Name]** is a clean, modern iOS application designed to help users manage their personal finances effectively. Built using **SwiftUI** and the MVVM architecture, it leverages **SwiftData** for robust local persistence.
+**MSaveMondey** is a clean, modern iOS application designed to help users manage their personal finances effectively. Built using **SwiftUI** and the MVVM architecture, it leverages **SwiftData** for robust local persistence.
 
 ## ✨ Key Features
 
