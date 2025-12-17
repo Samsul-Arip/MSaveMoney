@@ -1,4 +1,4 @@
-# [Your App Name] 💰
+# MSaveMoney 💰
 
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-5.0-blue.svg?style=flat&logo=swift) ![SwiftData](https://img.shields.io/badge/Database-SwiftData-green.svg) ![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)
 
