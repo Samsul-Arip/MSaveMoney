@@ -27,6 +27,7 @@ struct MSaveMoneyApp: App {
     var body: some Scene {
         WindowGroup {
             DashboardView()
+                .preferredColorScheme(.light)
         }
         .modelContainer(sharedModelContainer)
     }

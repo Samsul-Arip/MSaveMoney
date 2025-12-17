@@ -30,6 +30,7 @@ final class FinanceViewModel {
     func fetchData() {
         fetchTransactions()
         fetchBudgetSettings()
+        cleanupOldTransactions()
     }
     
     private func fetchTransactions() {
@@ -70,6 +71,33 @@ final class FinanceViewModel {
         }
     }
     
+    /// Cleanup transactions older than 12 months
+    /// Note: Balance is kept permanent, not affected by cleanup
+    private func cleanupOldTransactions() {
+        guard let context = modelContext else { return }
+        
+        let calendar = Calendar.current
+        guard let cutoffDate = calendar.date(byAdding: .month, value: -12, to: Date()) else { return }
+        
+        // Find transactions older than 12 months
+        let oldTransactions = transactions.filter { $0.date < cutoffDate }
+        
+        guard !oldTransactions.isEmpty else { return }
+        
+        // Delete old transactions without affecting balance (balance stays permanent)
+        for transaction in oldTransactions {
+            context.delete(transaction)
+        }
+        
+        do {
+            try context.save()
+            fetchTransactions()
+            print("Cleaned up \(oldTransactions.count) transactions older than 12 months")
+        } catch {
+            errorMessage = "Failed to cleanup old transactions: \(error.localizedDescription)"
+        }
+    }
+    
     // MARK: - Transaction Operations
     
     /// Add a new transaction
@@ -86,10 +114,9 @@ final class FinanceViewModel {
         
         context.insert(transaction)
         
-        // Update total balance based on transaction type
-        if type == .expense {
-            budgetSettings?.totalBalance -= amount
-        } else {
+        // Only income affects total balance directly
+        // Expenses are tracked separately against monthly budget
+        if type == .income {
             budgetSettings?.totalBalance += amount
         }
         budgetSettings?.updatedAt = Date()
@@ -106,10 +133,8 @@ final class FinanceViewModel {
     func deleteTransaction(_ transaction: Transaction) {
         guard let context = modelContext else { return }
         
-        // Reverse the balance change
-        if transaction.type == .expense {
-            budgetSettings?.totalBalance += transaction.amount
-        } else {
+        // Only reverse balance change for income transactions
+        if transaction.type == .income {
             budgetSettings?.totalBalance -= transaction.amount
         }
         budgetSettings?.updatedAt = Date()
@@ -128,10 +153,8 @@ final class FinanceViewModel {
     func updateTransaction(_ transaction: Transaction, name: String, amount: Double, type: TransactionType, date: Date, category: String?) {
         guard let context = modelContext else { return }
         
-        // First, reverse the old balance change
-        if transaction.type == .expense {
-            budgetSettings?.totalBalance += transaction.amount
-        } else {
+        // Reverse old balance change for income only
+        if transaction.type == .income {
             budgetSettings?.totalBalance -= transaction.amount
         }
         
@@ -142,10 +165,8 @@ final class FinanceViewModel {
         transaction.date = date
         transaction.category = category
         
-        // Apply the new balance change
-        if type == .expense {
-            budgetSettings?.totalBalance -= amount
-        } else {
+        // Apply new balance change for income only
+        if type == .income {
             budgetSettings?.totalBalance += amount
         }
         budgetSettings?.updatedAt = Date()

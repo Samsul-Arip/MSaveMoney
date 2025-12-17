@@ -97,7 +97,9 @@ struct TodaysExpensesView: View {
                     // Difference badge
                     if dailyTarget > 0 {
                         HStack(spacing: 2) {
-                            Text(isOverBudget ? "+" : "-")
+                            if isOverBudget {
+                                Text("-")
+                            }
                             Text(abs(difference).formattedCurrency())
                         }
                         .font(.system(size: 12, weight: .semibold, design: .rounded))
