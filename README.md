@@ -33,7 +33,7 @@ Based on essential financial management needs:
 
 1.  Clone this repository.
     ```bash
-    git clone [[https://github.com/username/repo-name.git](https://github.com/username/repo-name.git)](https://github.com/Samsul-Arip/MSaveMoney)
+    git clone https://github.com/Samsul-Arip/MSaveMoney
     ```
 2.  Open the `.xcodeproj` file in **Xcode 15+**.
 3.  Ensure the target is set to an iOS Simulator or Device (iOS 17.0+).
